@@ -1,0 +1,20 @@
+defaults:
+  - model: resnet18
+  - optimizer: adamw
+  - scheduler: cosine
+  - _self_
+
+_target_: training.methods.erm.Trainer
+
+gradient_accumulation_steps: 1
+device: ${oc.env:JUMPCP_DEVICE,auto}
+no_amp: false
+max_train_batches: null
+output: models/resnet18_jumpcp.pt
+
+# Best configuration of the ResNet-18 sweep, as retrained with seeds 0/42/645
+# (W&B jumpcp-resnet18-seeds: cnxykeoz, u0s394rs, d2jdcx91). Its batch size
+# (16) is set in experiment_resnet18.yaml.
+optimizer:
+  lr: 0.0002704061886417215
+  weight_decay: 0.00027372447834720173

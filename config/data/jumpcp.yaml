@@ -1,0 +1,20 @@
+_target_: training.data.dataset.JUMPCPDataModule
+
+data_dir: "../jumpcp-dataset/data/2k/500x500/final/"
+dataset_prefix: train_data
+statistics: null
+validation_source: source_2
+batch_size: 128
+workers: 8
+prefetch_factor: 4
+seed: ${seed}
+
+domain_column: null
+train_group_by: null
+validation_group_by: null
+groups_per_batch: null
+required_source_classes: null
+
+# Optional unlabeled controls appended per plate to grouped training batches.
+negative_control_dir: null
+negative_controls_per_plate: 0

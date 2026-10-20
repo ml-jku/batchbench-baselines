@@ -1,0 +1,57 @@
+name: coral-hyperparameter-sweep
+description: Bayesian search for the best Deep CORAL training hyperparameters.
+
+program: training/main.py
+method: bayes
+
+metric:
+  name: validation/accuracy
+  goal: maximize
+
+command:
+  - ${env}
+  - ${interpreter}
+  - -m
+  - training.main
+  - --config-name=experiment_coral
+  - ${args_no_hyphens}
+
+parameters:
+  trainer.optimizer.lr:
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.01
+
+  trainer.optimizer.weight_decay:
+    distribution: log_uniform_values
+    min: 0.000001
+    max: 0.01
+
+  trainer.penalty_weight:
+    distribution: log_uniform_values
+    min: 0.001
+    max: 10.0
+
+  data.batch_size:
+    values: [16, 32, 64, 128]
+
+  epochs:
+    value: 10
+
+  patience:
+    value: 10
+
+  data.domain_column:
+    value: Metadata_Source
+
+  data.validation_source:
+    value: source_2
+
+  wandb_mode:
+    value: online
+
+  wandb_project:
+    value: jumpcp-coral
+
+  trainer.output:
+    value: models/sweep_coral_checkpoint.pt

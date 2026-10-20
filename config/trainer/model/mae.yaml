@@ -1,0 +1,21 @@
+_target_: model.create_mae
+
+# Images are 500x500, so patch_size must divide 500 (10, 20, 25, 50).
+img_size: 500
+patch_size: 20
+
+# ViT-Small encoder, small decoder.
+embed_dim: 384
+depth: 12
+num_heads: 6
+decoder_embed_dim: 256
+decoder_depth: 4
+decoder_num_heads: 8
+mlp_ratio: 4.0
+
+mask_ratio: 0.75
+norm_pix_loss: true
+
+# Set to false if torch.use_deterministic_algorithms(True) raises an error
+# in the attention backward pass (only reachable without AMP).
+fused_attn: true

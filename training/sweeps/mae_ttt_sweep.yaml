@@ -1,0 +1,64 @@
+name: mae-ttt-sweep
+description: >
+  Bayesian search over the test-time-training hyperparameters. No training
+  happens (epochs=0): every run loads the finished probe checkpoint, adapts a
+  random validation subset image by image, and reports the accuracy with and
+  without TTT. Run experiment_mae_probe first.
+
+program: training/main.py
+method: bayes
+
+metric:
+  name: validation/ttt_accuracy
+  goal: maximize
+
+command:
+  - ${env}
+  - ${interpreter}
+  - -m
+  - training.main
+  - --config-name=experiment_mae_probe
+  - ${args_no_hyphens}
+
+parameters:
+  trainer.ttt.lr:
+    distribution: log_uniform_values
+    min: 0.0005
+    max: 0.05
+
+  trainer.ttt.steps:
+    values: [5, 10, 20, 40]
+
+  trainer.ttt.mask_ratio:
+    values: [0.5, 0.75, 0.9]
+
+  trainer.ttt.weight_decay:
+    values: [0.0, 0.2]
+
+  trainer.ttt.batch_size:
+    values: [8, 16, 32]
+
+  trainer.ttt.eval_samples:
+    value: 500
+
+  # No training: the probe checkpoint is only read, never overwritten.
+  epochs:
+    value: 0
+
+  trainer.output:
+    value: models/mae_ttt.pt
+
+  trainer.pretrained_checkpoint:
+    value: models/mae_pretrained.pt
+
+  data.validation_source:
+    value: source_2
+
+  data.workers:
+    value: 2
+
+  wandb_mode:
+    value: online
+
+  wandb_project:
+    value: jumpcp-mae-ttt

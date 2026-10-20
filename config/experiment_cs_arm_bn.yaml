@@ -1,0 +1,16 @@
+defaults:
+- experiment
+- override trainer: arm_bn
+- _self_
+
+data:
+  domain_column: "plate"
+  train_group_by: ${data.domain_column}
+  validation_group_by: ${data.domain_column}
+  groups_per_batch: 1
+  negative_control_dir: /system/user/publicwork/sanchez/gitrepos/jumpcp-dataset/data/negcons/500x500/final
+  negative_controls_per_plate: 128
+
+trainer:
+  gradient_accumulation_steps: 8
+  output: models/resnet18_cs_arm_bn.pt

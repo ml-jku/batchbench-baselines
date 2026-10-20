@@ -1,0 +1,20 @@
+defaults:
+  - data: jumpcp
+  - trainer: resnet18
+  - _self_
+
+seed: 42
+epochs: 60
+patience: 10
+log_every_n_batches: 10
+
+wandb_mode: online
+wandb_project: jumpcp-challenge
+wandb_entity: null
+wandb_run_name: null
+
+# Keep Hydra from creating dated output and .hydra directories.
+hydra:
+  run:
+    dir: .
+  output_subdir: null

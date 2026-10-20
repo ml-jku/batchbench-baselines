@@ -1,0 +1,58 @@
+name: mae-pretraining-sweep
+description: >
+  Bayesian search over MAE reconstruction-pretraining hyperparameters. Only
+  settings whose validation reconstruction loss is comparable are swept;
+  compare encoder architecture / patch size / mask ratio by running
+  experiment_mae separately and checking the probe accuracy instead.
+
+program: training/main.py
+method: bayes
+
+metric:
+  name: validation/loss
+  goal: minimize
+
+early_terminate:
+  type: hyperband
+  min_iter: 5
+  eta: 3
+
+command:
+  - ${env}
+  - ${interpreter}
+  - -m
+  - training.main
+  - --config-name=experiment_mae
+  - ${args_no_hyphens}
+
+parameters:
+  trainer.optimizer.lr:
+    distribution: log_uniform_values
+    min: 0.00005
+    max: 0.001
+
+  trainer.optimizer.weight_decay:
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.1
+
+  data.batch_size:
+    values: [32, 64, 128]
+
+  epochs:
+    value: 20
+
+  patience:
+    value: 5
+
+  data.validation_source:
+    value: source_2
+
+  wandb_mode:
+    value: online
+
+  wandb_project:
+    value: jumpcp-mae
+
+  trainer.output:
+    value: models/sweep_mae_checkpoint.pt

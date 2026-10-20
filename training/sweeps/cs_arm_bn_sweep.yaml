@@ -1,0 +1,61 @@
+name: cs-arm-bn-hyperparameter-sweep
+description: Bayesian sweep for CS-ARM-BN training hyperparameters.
+
+program: training/main.py
+method: bayes
+
+metric:
+  name: validation/accuracy
+  goal: maximize
+
+early_terminate:
+  type: hyperband
+  min_iter: 10
+  eta: 3
+
+command:
+  - ${env}
+  - ${interpreter}
+  - -m
+  - training.main
+  - --config-name=experiment_cs_arm_bn
+  - ${args_no_hyphens}
+
+parameters:
+  trainer.optimizer.lr:
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.01
+
+  seed:
+    value: 42
+
+  trainer.output:
+    value: /system/user/publicwork/sanchez/gitrepos/jumpcp-baselines/models/csarmbn_hp.pt
+
+  data.batch_size:
+    values: [16, 32, 64, 128]
+
+  trainer.gradient_accumulation_steps:
+    values: [1, 2, 4, 8]
+
+  data.negative_controls_per_plate:
+    values: [8, 16, 32, 64, 128]
+
+  trainer.gradient_accumulation_steps:
+    values: [2, 4, 8, 16]
+
+  wandb_mode:
+    value: online
+
+  trainer.no_amp:
+    value: true
+
+  data.workers:
+    value: 8
+
+  epochs:
+    value: 10
+
+  patience:
+    value: 10

@@ -1,0 +1,4 @@
+_target_: model.create_dann_model
+head_hidden_dim: 64
+head_hidden_layers: 2
+head_dropout: 0.19109308676248532

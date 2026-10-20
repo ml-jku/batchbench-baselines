@@ -1,0 +1,43 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Training data and experiment artifacts
+training_data/
+models/*.pt.incomplete
+models/*seed*
+wandb/
+checkpoints/
+outputs/
+runs/
+
+# Logs
+*.log
+
+# Editors and operating systems
+.idea/
+.DS_Store
+Thumbs.db
+
+notes.txt
+sweep_dann_checkpoint.pt
+sweep_resnet18_checkpoint.pt
+
+tests/
+conftest.py

@@ -1,0 +1,7 @@
+_target_: model.create_mae_classifier
+
+# The MAE architecture ("mae") is filled in from the pretraining checkpoint.
+pool: mean
+head_hidden_dim: 1024
+head_hidden_layers: 1
+head_dropout: 0.2

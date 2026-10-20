@@ -1,0 +1,9 @@
+# ResNet-18 baseline with the best sweep configuration (the optimizer settings
+# are in trainer/resnet18.yaml). `experiment` alone keeps the shared batch size.
+defaults:
+  - experiment
+  - override trainer: resnet18
+  - _self_
+
+data:
+  batch_size: 16

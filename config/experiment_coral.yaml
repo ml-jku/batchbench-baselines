@@ -1,0 +1,13 @@
+defaults:
+  - experiment
+  - override trainer: coral
+  - _self_
+
+
+data:
+  domain_column: "source"
+  train_group_by: ${data.domain_column}
+  validation_group_by: ${data.domain_column}
+  groups_per_batch: 4
+
+

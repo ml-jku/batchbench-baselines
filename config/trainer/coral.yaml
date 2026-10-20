@@ -1,0 +1,12 @@
+defaults:
+  - model: coral
+  - optimizer: adam
+  - scheduler: cosine
+  - _self_
+
+_target_: training.methods.coral.DeepCoral
+output: models/resnet18_jumpcp_coral.pt
+device: ${oc.env:JUMPCP_DEVICE,auto}
+
+penalty_weight: 0.1
+max_grad_norm: 1.0

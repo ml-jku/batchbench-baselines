@@ -1,0 +1,29 @@
+defaults:
+  - model: mae_classifier
+  - optimizer: adamw
+  - scheduler: cosine
+  - _self_
+
+_target_: training.methods.mae.MAEProbe
+
+# Checkpoint written by the MAE pretraining stage (experiment_mae).
+pretrained_checkpoint: models/mae_pretrained.pt
+
+gradient_accumulation_steps: 1
+device: ${oc.env:JUMPCP_DEVICE,auto}
+no_amp: false
+max_train_batches: null
+output: models/mae_ttt.pt
+
+# Test-time training. These values are stored in the checkpoint and used by
+# submissions/submission_mae_ttt.py (eval_samples is training-side only).
+ttt:
+  steps: 20
+  lr: 5e-3
+  momentum: 0.9
+  weight_decay: 0.2
+  mask_ratio: 0.75
+  batch_size: 16      # copies of the test image, each with its own mask
+  amp: true           # bf16 autocast on CUDA
+  seed: 0
+  eval_samples: 0     # >0: compare TTT vs. no TTT on this many validation images

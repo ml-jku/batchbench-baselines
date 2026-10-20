@@ -1,0 +1,12 @@
+defaults:
+  - experiment
+  - override trainer: dann
+  - _self_
+
+
+data:
+  batch_size: 32
+  domain_column: "source"
+  train_group_by: ${data.domain_column}
+  validation_group_by: ${data.domain_column}
+  groups_per_batch: 2

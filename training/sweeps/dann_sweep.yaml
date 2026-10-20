@@ -1,0 +1,68 @@
+name: dann-hyperparameter-sweep
+description: Bayesian search for the best DANN training hyperparameters.
+
+program: training/main.py
+method: bayes
+
+metric:
+  name: validation/class_accuracy
+  goal: maximize
+
+command:
+  - ${env}
+  - ${interpreter}
+  - -m
+  - training.main
+  - --config-name=experiment_dann
+  - ${args_no_hyphens}
+
+parameters:
+  trainer.optimizer.lr:
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.01
+
+  trainer.optimizer.weight_decay:
+    distribution: log_uniform_values
+    min: 0.000001
+    max: 0.01
+
+  trainer.domain_loss_weight:
+    distribution: log_uniform_values
+    min: 0.001
+    max: 1.0
+
+  trainer.model.head_dropout:
+    distribution: uniform
+    min: 0.0
+    max: 0.5
+
+  data.batch_size:
+    values: [16, 32, 64, 128]
+
+  epochs:
+    value: 10
+
+  patience:
+    value: 10
+
+  trainer.model.head_hidden_dim:
+    value: 64
+
+  trainer.model.head_hidden_layers:
+    value: 2
+
+  data.domain_column:
+    value: source
+
+  data.validation_source:
+    value: source_2
+
+  wandb_mode:
+    value: online
+
+  wandb_project:
+    value: jumpcp-dann
+
+  trainer.output:
+    value: models/sweep_dann_checkpoint.pt

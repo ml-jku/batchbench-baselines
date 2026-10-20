@@ -1,0 +1,14 @@
+defaults:
+- experiment
+- override trainer: arm_bn
+- _self_
+
+data:
+  domain_column: "plate"
+  train_group_by: ${data.domain_column}
+  validation_group_by: ${data.domain_column}
+  groups_per_batch: 1
+
+trainer:
+  gradient_accumulation_steps: 8
+  output: models/resnet18_arm_bn.pt

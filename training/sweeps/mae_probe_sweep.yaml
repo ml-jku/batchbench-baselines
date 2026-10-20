@@ -1,0 +1,71 @@
+name: mae-probe-sweep
+description: Bayesian search for the classification head trained on the frozen MAE encoder.
+
+program: training/main.py
+method: bayes
+
+metric:
+  name: validation/accuracy
+  goal: maximize
+
+early_terminate:
+  type: hyperband
+  min_iter: 5
+  eta: 3
+
+command:
+  - ${env}
+  - ${interpreter}
+  - -m
+  - training.main
+  - --config-name=experiment_mae_probe
+  - ${args_no_hyphens}
+
+parameters:
+  trainer.optimizer.lr:
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.01
+
+  trainer.optimizer.weight_decay:
+    distribution: log_uniform_values
+    min: 0.000001
+    max: 0.01
+
+  trainer.model.pool:
+    values: [mean, cls]
+
+  trainer.model.head_hidden_layers:
+    values: [0, 1]
+
+  trainer.model.head_hidden_dim:
+    values: [512, 1024, 2048]
+
+  trainer.model.head_dropout:
+    distribution: uniform
+    min: 0.0
+    max: 0.5
+
+  data.batch_size:
+    values: [64, 128, 256]
+
+  epochs:
+    value: 15
+
+  patience:
+    value: 5
+
+  trainer.pretrained_checkpoint:
+    value: models/mae_pretrained.pt
+
+  data.validation_source:
+    value: source_2
+
+  wandb_mode:
+    value: online
+
+  wandb_project:
+    value: jumpcp-mae-probe
+
+  trainer.output:
+    value: models/sweep_mae_probe_checkpoint.pt

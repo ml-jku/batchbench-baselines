@@ -1,0 +1,21 @@
+defaults:
+  - model: dann
+  - optimizer: adamw
+  - scheduler: cosine
+  - _self_
+
+_target_: training.methods.dann.DANN
+
+gradient_accumulation_steps: 1
+domain_loss_weight: 0.909630225707748
+device: ${oc.env:JUMPCP_DEVICE,auto}
+no_amp: false
+max_train_batches: null
+output: models/resnet18_jumpcp_dann.pt
+
+# Best configuration of the DANN sweep, as retrained with seeds 0/42/645
+# (W&B jumpcp-dann-seeds: ohe2df3t, cotchmuv, psctz4pr). Its head dropout is in
+# model/dann.yaml and its batch size (32) in experiment_dann.yaml.
+optimizer:
+  lr: 0.0005420100021170347
+  weight_decay: 1.8323069661367824e-05

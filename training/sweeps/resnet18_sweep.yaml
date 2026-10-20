@@ -1,0 +1,45 @@
+program: training/main.py
+method: bayes
+
+metric:
+  name: validation/accuracy
+  goal: maximize
+
+early_terminate:
+  type: hyperband
+  min_iter: 5
+  eta: 3
+
+command:
+  - ${env}
+  - ${interpreter}
+  - -m
+  - training.main
+  - --config-name=experiment
+  - ${args_no_hyphens}
+
+parameters:
+  trainer.optimizer.lr:
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.01
+  trainer.optimizer.weight_decay:
+    distribution: log_uniform_values
+    min: 0.000001
+    max: 0.01
+  data.batch_size:
+    values: [16, 32, 64, 128]
+  trainer.gradient_accumulation_steps:
+    values: [1]
+  epochs:
+    value: 10
+  data.validation_source:
+    value: source_2
+  data.workers:
+    value: 4
+  wandb_mode:
+    value: online
+  wandb_project:
+    value: jumpcp-resnet-sweep
+  trainer.output:
+    value: models/sweep_resnet18_checkpoint.pt

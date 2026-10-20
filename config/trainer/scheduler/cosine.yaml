@@ -1,0 +1,4 @@
+_target_: torch.optim.lr_scheduler.CosineAnnealingLR
+# Filled by the trainer with epochs * optimizer updates per epoch.
+T_max: null
+eta_min: 1e-6
