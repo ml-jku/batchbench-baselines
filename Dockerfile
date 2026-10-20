@@ -23,7 +23,7 @@ COPY utils.py /submission/utils.py
 #   tent     -> submission_tent.py      / models/resnet18_adabn_tent.pt
 #   coral    -> submission_coral.py     / models/resnet18_coral.pt
 #   dann     -> submission_dann.py      / models/resnet18_dann.pt
-COPY submissions/submission_arm_bn.py /submission/submission.py
-COPY models/arm_bn/arm_bn_0.pt /submission/models/arm_bn.pt
+COPY submissions/submission_cs_arm_bn.py /submission/submission.py
+COPY models/cs_arm_bn/cs_arm_bn_0.pt /submission/models/cs_arm_bn.pt
 
 ENV PYTHONPATH=/submission
