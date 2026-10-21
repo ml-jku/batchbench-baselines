@@ -53,9 +53,10 @@ Then, start training with:
 
 ```bash
 python -m training.main --config-name=experiment_resnet18 \
-  data.data_dir=data/2k/500x500/final \
+  data.data_dir=data/2k/500x500 \
   epochs=60 \
   trainer.output=models/resnet18.pt \
+  wandb_mode=disabled \
 ```
 
 ## Preparing your submission code
