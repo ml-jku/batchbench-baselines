@@ -14,7 +14,7 @@ python -m pip install -U huggingface_hub
 
 ### Downloading the data
 
-Download the [2k, 500×500 dataset](https://huggingface.co/datasets/ai-lab-jku/jumpcp-challenge-datasets/tree/main/2k/500x500).
+Download the [one of the datasets](https://huggingface.co/datasets/ai-lab-jku/jumpcp-challenge-datasets/tree/main/). In this example, we will download the [2k classes set with 500x500 resolution](https://huggingface.co/datasets/ai-lab-jku/jumpcp-challenge-datasets/tree/main/2k/500x500), the same settings as in the test leaderboard. For development purposes, a dataset with [lower resolution](https://huggingface.co/datasets/ai-lab-jku/jumpcp-challenge-datasets/tree/main/2k/500x500) and a [dataset with only the 8 positive control classes](https://huggingface.co/datasets/ai-lab-jku/jumpcp-challenge-datasets/tree/main/mnist/200x200) are also available. 
 Download only the linked dataset folder to a local directory of your choice:
 
 ```bash
