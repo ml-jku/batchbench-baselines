@@ -41,3 +41,5 @@ sweep_resnet18_checkpoint.pt
 
 tests/
 conftest.py
+
+submission_t3a.py
