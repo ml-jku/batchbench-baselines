@@ -1,4 +1,10 @@
 """Hydra entrypoint for all JUMPCP training methods."""
+import os
+
+# Required by torch.use_deterministic_algorithms(True) for cuBLAS; must be set
+# before CUDA is initialized, so sweep agents work without launch.json.
+os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":16:8")
+
 import hydra
 import wandb
 import torch

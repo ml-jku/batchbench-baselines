@@ -1,0 +1,9 @@
+# Stage 1 of TTT-MAE: masked-autoencoder reconstruction pretraining.
+defaults:
+  - experiment
+  - override trainer: mae
+  - _self_
+
+epochs: 300
+patience: 10
+wandb_project: jumpcp-mae-ttt

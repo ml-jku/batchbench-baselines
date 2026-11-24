@@ -1,0 +1,7 @@
+_target_: training.utils.warmup_cosine_scheduler
+# Filled by the trainer with epochs * optimizer updates per epoch.
+T_max: null
+# Fraction of all optimizer updates spent linearly warming up the lr.
+warmup_fraction: 0.05
+warmup_start_factor: 1e-3
+eta_min: 1e-6

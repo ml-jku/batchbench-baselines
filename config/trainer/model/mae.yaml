@@ -2,7 +2,7 @@ _target_: model.create_mae
 
 # Images are 500x500, so patch_size must divide 500 (10, 20, 25, 50).
 img_size: 500
-patch_size: 20
+patch_size: 25
 
 # ViT-Small encoder, small decoder.
 embed_dim: 384

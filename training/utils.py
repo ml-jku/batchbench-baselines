@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Literal
 
+import torch
+
 
 @dataclass
 class EarlyStopping:
@@ -47,3 +49,31 @@ class EarlyStopping:
             f"Early stopping after {epoch} epochs; best validation "
             f"score was at epoch {self.best_epoch}."
         )
+
+
+def warmup_cosine_scheduler(
+    optimizer: torch.optim.Optimizer,
+    T_max: int,
+    warmup_fraction: float = 0.05,
+    warmup_start_factor: float = 1e-3,
+    eta_min: float = 1e-6,
+) -> torch.optim.lr_scheduler.LRScheduler:
+    """Linear warmup over ``warmup_fraction`` of ``T_max`` optimizer updates,
+    then cosine annealing to ``eta_min`` for the remaining updates."""
+    warmup_steps = int(round(T_max * warmup_fraction))
+    if warmup_steps <= 0:
+        return torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer, T_max=T_max, eta_min=eta_min
+        )
+    warmup = torch.optim.lr_scheduler.LinearLR(
+        optimizer,
+        start_factor=warmup_start_factor,
+        end_factor=1.0,
+        total_iters=warmup_steps,
+    )
+    cosine = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer, T_max=max(1, T_max - warmup_steps), eta_min=eta_min
+    )
+    return torch.optim.lr_scheduler.SequentialLR(
+        optimizer, schedulers=[warmup, cosine], milestones=[warmup_steps]
+    )

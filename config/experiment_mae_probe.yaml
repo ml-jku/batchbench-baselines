@@ -1,0 +1,14 @@
+# Stage 2 of TTT-MAE: classification head on the frozen pretrained encoder.
+# Requires trainer.pretrained_checkpoint from experiment_mae.
+defaults:
+  - experiment
+  - override trainer: mae_probe
+  - _self_
+
+epochs: 30
+patience: 10
+
+# Training setup of models/mae_probe.pt (run y0xo24pu).
+data:
+  batch_size: 256
+  validation_source: source_2

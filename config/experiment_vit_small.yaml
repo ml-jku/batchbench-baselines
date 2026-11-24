@@ -1,0 +1,13 @@
+# ViT-Small trained from scratch with plain ERM (same loop as resnet18).
+# ViTs train slower than CNNs from scratch, hence more epochs and patience.
+defaults:
+  - experiment
+  - override trainer: vit_small
+  - _self_
+
+epochs: 100
+patience: 20
+wandb_project: jumpcp-vit-small
+
+data:
+  batch_size: 64

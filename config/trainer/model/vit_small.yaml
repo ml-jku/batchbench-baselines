@@ -1,0 +1,14 @@
+_target_: model.create_vit_small
+
+# ViT-Small (DeiT-S): embed_dim=384, depth=12, num_heads=6, mlp_ratio=4 are
+# fixed by the architecture. Images are 500x500, so patch_size must divide
+# 500 (20 -> 625 tokens, 25 -> 400 tokens, 50 -> 100 tokens).
+img_size: 500
+patch_size: 25
+global_pool: token   # "token" (class token) or "avg" (mean of patch tokens)
+drop_rate: 0.0
+drop_path_rate: 0.2265716063509246
+
+# Set to false if torch.use_deterministic_algorithms(True) raises an error
+# in the attention backward pass (only reachable without AMP).
+fused_attn: true

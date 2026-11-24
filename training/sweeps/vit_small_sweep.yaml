@@ -1,0 +1,71 @@
+name: vit-small-sweep
+description: >
+  Bayesian search over the four ViT-Small hyperparameters that matter most
+  when training from scratch (lr, weight decay, stochastic depth, patch size),
+  sized for ~20 runs. Everything else stays at the DeiT defaults in
+  config/trainer/vit_small.yaml (betas, 5% warmup, grad clipping 1.0, label
+  smoothing 0.1, no dropout, class-token pooling) and batch size 64; batch
+  size mostly trades off against lr, so it is fixed rather than swept.
+
+program: training/main.py
+method: bayes
+
+metric:
+  name: validation/accuracy
+  goal: maximize
+
+early_terminate:
+  type: hyperband
+  min_iter: 5
+  eta: 3
+
+command:
+  - ${env}
+  - ${interpreter}
+  - -m
+  - training.main
+  - --config-name=experiment_vit_small
+  - ${args_no_hyphens}
+
+parameters:
+  trainer.optimizer.lr:
+    distribution: log_uniform_values
+    min: 0.0001
+    max: 0.002
+
+  trainer.optimizer.weight_decay:
+    distribution: log_uniform_values
+    min: 0.01
+    max: 0.3
+
+  trainer.model.drop_path_rate:
+    distribution: uniform
+    min: 0.0
+    max: 0.3
+
+  # 50 -> 100 tokens, 25 -> 400 tokens (patch 20 / 625 tokens is too costly
+  # for a sweep; try it separately if 25 clearly beats 50).
+  trainer.model.patch_size:
+    values: [25, 50]
+
+  # --- fixed ---
+  epochs:
+    value: 20
+
+  patience:
+    value: 10
+
+  data.validation_source:
+    value: source_2
+
+  data.workers:
+    value: 8
+
+  wandb_mode:
+    value: online
+
+  wandb_project:
+    value: jumpcp-vit-small-sweep
+
+  trainer.output:
+    value: models/sweep_vit_small_checkpoint.pt

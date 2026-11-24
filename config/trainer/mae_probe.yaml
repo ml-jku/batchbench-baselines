@@ -15,15 +15,23 @@ no_amp: false
 max_train_batches: null
 output: models/mae_ttt.pt
 
+# Probe optimizer of models/mae_probe.pt (best mae-probe-sweep config, run
+# y0xo24pu; the checkpoint itself does not store optimizer settings).
+optimizer:
+  lr: 0.00011903776931171376
+  weight_decay: 0.0041163986577045
+
 # Test-time training. These values are stored in the checkpoint and used by
 # submissions/submission_mae_ttt.py (eval_samples is training-side only).
+# Best mae-ttt-sweep config (run 6u4jmvsr, jolly-sweep-22): ttt_accuracy
+# 0.3460 vs. 0.3378 without TTT on 14000 source_2 validation images.
 ttt:
   steps: 20
-  lr: 5e-3
+  lr: 0.0016236920416612447
   momentum: 0.9
-  weight_decay: 0.2
-  mask_ratio: 0.75
-  batch_size: 16      # copies of the test image, each with its own mask
+  weight_decay: 0.0
+  mask_ratio: 0.9
+  batch_size: 32      # copies of the test image, each with its own mask
   amp: true           # bf16 autocast on CUDA
   seed: 0
   eval_samples: 0     # >0: compare TTT vs. no TTT on this many validation images

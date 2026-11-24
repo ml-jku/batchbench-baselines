@@ -83,7 +83,9 @@ class Trainer:
             in_chans=self.dataset_info.num_channels,
         ).to(self.device)
 
-        self.loss_fn = nn.CrossEntropyLoss()
+        self.loss_fn = nn.CrossEntropyLoss(
+            label_smoothing=getattr(self.args, "label_smoothing", 0.0) or 0.0
+        )
         self.optimizer_cfg = self.args.optimizer
         self.optimizer = instantiate(
             self.optimizer_cfg,
@@ -215,6 +217,12 @@ class Trainer:
             if not update:
                 continue
 
+            grad_clip_norm = getattr(self.args, "grad_clip_norm", None)
+            if grad_clip_norm:  # None or 0 disables clipping
+                self.scaler.unscale_(self.optimizer)
+                nn.utils.clip_grad_norm_(
+                    self.model.parameters(), grad_clip_norm
+                )
             self.scaler.step(self.optimizer)
             self.scaler.update()
             self.scheduler.step()
@@ -292,9 +300,13 @@ class Trainer:
         epoch: int,
         validation: dict[str, float],
     ) -> dict[str, Any]:
+        model_config = OmegaConf.to_container(self.args.model, resolve=True)
+        model_config.pop("_target_", None)
         return {
             "epoch": epoch,
             "validation_metrics": validation,
+            # Constructor arguments needed to rebuild the model at inference.
+            "model_config": model_config,
         }
 
     def _log_batch(

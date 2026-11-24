@@ -75,6 +75,8 @@ and bundles its checkpoint. To build a specific method, edit the last two
 | cs-arm-bn | `submissions/submission_cs_arm_bn.py` | `models/resnet18_cs_arm_bn.pt` |
 | coral | `submissions/submission_coral.py` | `models/resnet18_coral.pt` |
 | dann | `submissions/submission_dann.py` | `models/resnet18_dann.pt` |
+| vit-small | `submissions/submission_vit_small.py` | `models/vit_small/vit_small_0.pt` |
+| ttt-mae | `submissions/submission_mae_ttt.py` | `models/mae_ttt/mae_ttt.pt` |
 
 ```dockerfile
 COPY submissions/submission_<method>.py /submission/submission.py
@@ -92,13 +94,15 @@ The destination filename must match the submission's `CHECKPOINT_PATH`:
 | cs-arm-bn | `cs_arm_bn.pt` |
 | coral | `coral.pt` |
 | dann | `dann.pt` |
+| vit-small | `vit_small/vit_small_0.pt` |
+| ttt-mae | `mae_ttt/mae_ttt.pt` |
 
 
 For example, to use the checkpoint currently selected in the Dockerfile:
 
 ```dockerfile
-COPY submissions/submission_cs_arm_bn.py /submission/submission.py
-COPY models/cs_arm_bn/cs_arm_bn_0.pt /submission/models/cs_arm_bn.pt
+COPY submissions/submission_mae_ttt.py /submission/submission.py
+COPY models/mae_ttt/mae_ttt.pt /submission/models/mae_ttt/mae_ttt.pt
 ```
 
 

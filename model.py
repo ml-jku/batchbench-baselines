@@ -39,6 +39,55 @@ def create_resnet(
 
 
 # ---------------------------------------------------------------------------
+# ViT-Small (plain ERM, trained from scratch)
+#
+# ViT-S/16 as defined by Touvron et al., "Training data-efficient image
+# transformers & distillation through attention" (DeiT, ICML 2021):
+# embed_dim=384, depth=12, num_heads=6, mlp_ratio=4. Only the input side is
+# adapted to JUMP-CP (500x500 images, 5 channels, a patch size dividing 500).
+# ---------------------------------------------------------------------------
+
+
+VIT_SMALL_NAME = "vit_small_patch16_224"
+
+
+def create_vit_small(
+    num_classes: int = NUM_CLASSES,
+    in_chans: int = NUM_INPUT_CHANNELS,
+    num_domains: int | None = None,
+    img_size: int = 500,
+    patch_size: int = 25,
+    global_pool: str = "token",
+    drop_rate: float = 0.0,
+    drop_path_rate: float = 0.1,
+    fused_attn: bool = True,
+) -> nn.Module:
+    """Create a randomly initialized ViT-Small classifier."""
+    del num_domains
+    if img_size % patch_size != 0:
+        raise ValueError(
+            f"img_size ({img_size}) must be divisible by patch_size "
+            f"({patch_size})."
+        )
+    model = timm.create_model(
+        VIT_SMALL_NAME,
+        pretrained=False,
+        num_classes=num_classes,
+        in_chans=in_chans,
+        img_size=img_size,
+        patch_size=patch_size,
+        global_pool=global_pool,
+        drop_rate=drop_rate,
+        drop_path_rate=drop_path_rate,
+    )
+    # Memory-efficient attention backward is not deterministic; allow turning
+    # fused attention off when torch deterministic mode complains.
+    for block in model.blocks:
+        block.attn.fused_attn = fused_attn
+    return model
+
+
+# ---------------------------------------------------------------------------
 # CORAL
 # ---------------------------------------------------------------------------
 

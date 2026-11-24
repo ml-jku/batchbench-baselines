@@ -1,7 +1,8 @@
 _target_: model.create_mae_classifier
 
 # The MAE architecture ("mae") is filled in from the pretraining checkpoint.
-pool: mean
-head_hidden_dim: 1024
+# Head settings of models/mae_probe.pt (best mae-probe-sweep config).
+pool: cls
+head_hidden_dim: 512
 head_hidden_layers: 1
-head_dropout: 0.2
+head_dropout: 0.3449842932932756

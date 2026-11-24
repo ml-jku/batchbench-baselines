@@ -23,8 +23,8 @@ command:
 parameters:
   trainer.ttt.lr:
     distribution: log_uniform_values
-    min: 0.0005
-    max: 0.05
+    min: 0.00001
+    max: 0.002
 
   trainer.ttt.steps:
     values: [5, 10, 20, 40]
@@ -39,15 +39,22 @@ parameters:
     values: [8, 16, 32]
 
   trainer.ttt.eval_samples:
-    value: 500
+    value: 14000
+
+  # Picks the validation subset: pinned so every run scores the same images,
+  # whatever trainer/mae_probe.yaml says.
+  trainer.ttt.seed:
+    value: 0
 
   # No training: the probe checkpoint is only read, never overwritten.
   epochs:
     value: 0
 
   trainer.output:
-    value: models/mae_ttt.pt
+    value: models/mae_probe.pt
 
+  # Only supplies the MAE architecture at construction; the TTT evaluation
+  # loads the self-contained probe checkpoint from trainer.output.
   trainer.pretrained_checkpoint:
     value: models/mae_pretrained.pt
 
@@ -55,7 +62,7 @@ parameters:
     value: source_2
 
   data.workers:
-    value: 2
+    value: 8
 
   wandb_mode:
     value: online

@@ -1,0 +1,19 @@
+defaults:
+  - model: mae
+  - optimizer: adamw
+  - scheduler: cosine
+  - _self_
+
+_target_: training.methods.mae.MAEPretrainer
+
+gradient_accumulation_steps: 1
+device: ${oc.env:JUMPCP_DEVICE,auto}
+no_amp: false
+max_train_batches: null
+output: models/mae_pretrained.pt
+
+optimizer:
+  _convert_: all
+  lr: 0.0005673130801218032
+  weight_decay: 0.0001196793919311323
+  betas: [0.9, 0.95]
